@@ -6,12 +6,13 @@ import com.rk.exec.isTerminalInstalled
 import com.rk.file.child
 import com.rk.file.sandboxHomeDir
 import com.rk.icons.Icon
+import com.rk.file.BuiltinFileType
 import com.rk.lsp.LspConnectionConfig
 import com.rk.lsp.ScriptedLspServer
 import java.io.File
 
 class LeanServer(
-    override val icon: Icon,
+    override val icon: Icon? = null,
     override val supportedExtensions: List<String> = listOf("lean"),
     override val installScript: File
 ) : ScriptedLspServer() {
@@ -19,7 +20,7 @@ class LeanServer(
     override val id = "lean"
     override val languageName = "Lean"
     override val serverName = "lean-lsp"
-    override val installId = "Lean LSP"
+    override val installId = "Lean and Lean LSP"
 
     private val latestVersion = "4.34.1"
 
