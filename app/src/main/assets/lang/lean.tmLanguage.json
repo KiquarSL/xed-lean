@@ -1,0 +1,304 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "version": "0.1.0",
+  "name": "Lean",
+  "scopeName": "source.lean",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#keywords" },
+    { "include": "#declarations" },
+    { "include": "#theorem_declarations" },
+    { "include": "#def_declarations" },
+    { "include": "#inductive_declarations" },
+    { "include": "#structure_declarations" },
+    { "include": "#class_declarations" },
+    { "include": "#instance_declarations" },
+    { "include": "#namespace_declarations" },
+    { "include": "#import_declarations" },
+    { "include": "#where_clauses" },
+    { "include": "#let_expressions" },
+    { "include": "#do_expressions" },
+    { "include": "#if_expressions" },
+    { "include": "#match_expressions" },
+    { "include": "#lambda_expressions" },
+    { "include": "#function_bindings" },
+    { "include": "#pattern_matching" },
+    { "include": "#type_signatures" },
+    { "include": "#strings" },
+    { "include": "#char_literals" },
+    { "include": "#numbers" },
+    { "include": "#operators" },
+    { "include": "#variables" },
+    { "include": "#constructors" },
+    { "include": "#types" },
+    { "include": "#tactics" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "begin": "/\\-",
+          "end": "\\-/",
+          "name": "comment.block.lean",
+          "patterns": [
+            { "include": "#comments" }
+          ]
+        },
+        {
+          "begin": "--",
+          "end": "$",
+          "name": "comment.line.double-dash.lean"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "match": "\\b(theorem|lemma|example|def|abbrev|opaque|inductive|structure|class|instance|namespace|section|variable|universe|import|open|export|private|protected|noncomputable|partial|unsafe|mutual|deriving|extends|where|let|in|do|if|then|else|match|with|fun|forall|exists|by|have|show|from|calc|suffices|obtain|assume|syntax|macro|notation|infix|prefix|postfix|attribute|local|scoped)\\b",
+          "name": "keyword.control.lean"
+        }
+      ]
+    },
+    "declarations": {
+      "patterns": [
+        {
+          "match": "\\b(theorem|lemma|example|def|abbrev|opaque|inductive|structure|class|instance|namespace|section)\\s+([A-Za-z_][A-Za-z0-9_'.]*)",
+          "captures": {
+            "1": { "name": "keyword.declaration.lean" },
+            "2": { "name": "entity.name.function.lean" }
+          }
+        }
+      ]
+    },
+    "theorem_declarations": {
+      "match": "\\b(theorem|lemma|example)\\s+([A-Za-z_][A-Za-z0-9_'.]*)",
+      "captures": {
+        "1": { "name": "keyword.declaration.theorem.lean" },
+        "2": { "name": "entity.name.function.theorem.lean" }
+      }
+    },
+    "def_declarations": {
+      "match": "\\b(def|abbrev|opaque)\\s+([A-Za-z_][A-Za-z0-9_'.]*)",
+      "captures": {
+        "1": { "name": "keyword.declaration.def.lean" },
+        "2": { "name": "entity.name.function.def.lean" }
+      }
+    },
+    "inductive_declarations": {
+      "match": "\\binductive\\s+([A-Za-z_][A-Za-z0-9_'.]*)",
+      "captures": {
+        "1": { "name": "entity.name.type.inductive.lean" }
+      }
+    },
+    "structure_declarations": {
+      "match": "\\bstructure\\s+([A-Za-z_][A-Za-z0-9_'.]*)",
+      "captures": {
+        "1": { "name": "entity.name.type.structure.lean" }
+      }
+    },
+    "class_declarations": {
+      "match": "\\bclass\\s+([A-Za-z_][A-Za-z0-9_'.]*)",
+      "captures": {
+        "1": { "name": "entity.name.type.class.lean" }
+      }
+    },
+    "instance_declarations": {
+      "match": "\\binstance\\s+([A-Za-z_][A-Za-z0-9_'.]*)",
+      "captures": {
+        "1": { "name": "entity.name.type.instance.lean" }
+      }
+    },
+    "namespace_declarations": {
+      "match": "\\b(namespace|section)\\s+([A-Za-z_][A-Za-z0-9_'.]*)",
+      "captures": {
+        "1": { "name": "keyword.declaration.namespace.lean" },
+        "2": { "name": "entity.name.type.namespace.lean" }
+      }
+    },
+    "import_declarations": {
+      "match": "\\bimport\\s+([A-Za-z_][A-Za-z0-9_'.]*)",
+      "captures": {
+        "1": { "name": "entity.name.type.module.lean" }
+      }
+    },
+    "where_clauses": {
+      "match": "\\bwhere\\b",
+      "name": "keyword.control.where.lean"
+    },
+    "let_expressions": {
+      "match": "\\blet\\b",
+      "name": "keyword.control.let.lean"
+    },
+    "do_expressions": {
+      "match": "\\bdo\\b",
+      "name": "keyword.control.do.lean"
+    },
+    "if_expressions": {
+      "patterns": [
+        {
+          "match": "\\bif\\b",
+          "name": "keyword.control.if.lean"
+        },
+        {
+          "match": "\\bthen\\b",
+          "name": "keyword.control.then.lean"
+        },
+        {
+          "match": "\\belse\\b",
+          "name": "keyword.control.else.lean"
+        }
+      ]
+    },
+    "match_expressions": {
+      "patterns": [
+        {
+          "match": "\\bmatch\\b",
+          "name": "keyword.control.match.lean"
+        },
+        {
+          "match": "\\bwith\\b",
+          "name": "keyword.control.with.lean"
+        }
+      ]
+    },
+    "lambda_expressions": {
+      "patterns": [
+        {
+          "match": "\\bfun\\b",
+          "name": "keyword.control.fun.lean"
+        },
+        {
+          "match": "λ",
+          "name": "keyword.operator.lambda.lean"
+        },
+        {
+          "match": "=>",
+          "name": "keyword.operator.arrow.lean"
+        }
+      ]
+    },
+    "function_bindings": {
+      "match": "^\\s*([a-zA-Z_][A-Za-z0-9_'.]*)",
+      "captures": {
+        "1": { "name": "entity.name.function.lean" }
+      }
+    },
+    "pattern_matching": {
+      "patterns": [
+        {
+          "match": "\\b_\\b",
+          "name": "variable.language.wildcard.lean"
+        },
+        {
+          "match": "\\b(True|False)\\b",
+          "name": "constant.language.boolean.lean"
+        },
+        {
+          "match": "\\b(some|none|nil|cons|inl|inr|unit|tt|ff)\\b",
+          "name": "support.constant.data.lean"
+        }
+      ]
+    },
+    "type_signatures": {
+      "match": "([a-zA-Z_][A-Za-z0-9_'.]*)\\s*:",
+      "captures": {
+        "1": { "name": "entity.name.function.lean" }
+      }
+    },
+    "strings": {
+      "patterns": [
+        {
+          "begin": "\"",
+          "end": "\"",
+          "name": "string.quoted.double.lean",
+          "patterns": [
+            {
+              "match": "\\\\(\\\\|[abfnrtv]|'|\"|0|u[0-9a-fA-F]{4})",
+              "name": "constant.character.escape.lean"
+            }
+          ]
+        }
+      ]
+    },
+    "char_literals": {
+      "match": "'(\\\\.|[^'\\\\])'",
+      "name": "constant.character.lean"
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "match": "\\b[0-9]+\\.[0-9]+([eE][+-]?[0-9]+)?\\b",
+          "name": "constant.numeric.float.lean"
+        },
+        {
+          "match": "\\b0[xX][0-9a-fA-F]+\\b",
+          "name": "constant.numeric.hex.lean"
+        },
+        {
+          "match": "\\b0[oO][0-7]+\\b",
+          "name": "constant.numeric.octal.lean"
+        },
+        {
+          "match": "\\b0[bB][01]+\\b",
+          "name": "constant.numeric.binary.lean"
+        },
+        {
+          "match": "\\b[0-9]+\\b",
+          "name": "constant.numeric.integer.lean"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "match": "[:!#$%&*+./<=>?@\\\\^|~-]+",
+          "name": "keyword.operator.lean"
+        },
+        {
+          "match": "\\b(funext|propext|Quot\\.sound|Classical\\.choice|rfl|Eq\\.refl|Iff\\.intro|Iff\\.mp|Iff\\.mpr|And\\.intro|And\\.left|And\\.right|Or\\.intro|Or\\.elim|Not\\.intro|Not\\.elim|Exists\\.intro|Exists\\.elim|Subtype\\.mk|Subtype\\.val|Subtype\\.property)\\b",
+          "name": "keyword.operator.logical.lean"
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "match": "\\b[a-z_][A-Za-z0-9_'.]*\\b",
+          "name": "variable.other.lean"
+        },
+        {
+          "match": "\\b[a-zA-Z_][A-Za-z0-9_']*\\?\\b",
+          "name": "variable.other.implicit.lean"
+        }
+      ]
+    },
+    "constructors": {
+      "patterns": [
+        {
+          "match": "\\b[A-Z][A-Za-z0-9_'.]*\\b",
+          "name": "entity.name.tag.constructor.lean"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "match": "\\b(Nat|Int|Float|Bool|Char|String|List|Option|Prod|Sum|Unit|Empty|Prop|Type|Sort|Decidable|Fin|Vector|Array|Subtype|Sigma|PSigma|And|Or|Not|Iff|Exists|Forall|Eq|Ne|HEq|Subsingleton)\\b",
+          "name": "support.type.lean"
+        },
+        {
+          "match": "\\b(Nat|Int|Float|Bool|Char|String|List|Option|Prod|Sum|Unit|Empty|Prop|Type|Sort|Decidable|Fin|Vector|Array|Subtype|Sigma|PSigma|And|Or|Not|Iff|Exists|Forall|Eq|Ne|HEq|Subsingleton)\\b",
+          "name": "support.type.builtin.lean"
+        }
+      ]
+    },
+    "tactics": {
+      "patterns": [
+        {
+          "match": "\\b(rfl|simp|rw|rewrite|exact|apply|intro|intros|assumption|contradiction|exfalso|constructor|left|right|split|cases|induction|injection|funext|ext|congr|have|suffices|calc|trans|norm_num|ring|field|linarith|nlinarith|omega|decide|native_decide|trivial|tauto|aesop|library_search|exact\\?|apply\\?|rw\\?|simp\\?|simp_all|push_neg|by_contra|by_cases|rcases|obtain|use|refine|convert|subst|subst_vars|rename_i|clear|revert|generalize|unfold|fold|change|show|syntax|macro|elab|macro_rules|notation|infix|prefix|postfix|attribute|deriving|instance|where|let|match|fun|if|then|else|do|return|pure|bind|seq|fail_if_success|try|repeat|first|all_goals|any_goals|focus|case|next|case\\?|guard_target|guard_hyp|guard_expr|guard_goal|guard_tags|guard_msgs)\\b",
+          "name": "keyword.control.tactic.lean"
+        }
+      ]
+    }
+  }
+}

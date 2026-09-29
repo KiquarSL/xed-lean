@@ -1,0 +1,81 @@
+{
+  "comments": {
+    "lineComment": "--",
+    "blockComment": ["/-", "-/"]
+  },
+  "brackets": [
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"],
+    ["⟨", "⟩"],
+    ["⦃", "⦄"]
+  ],
+  "autoClosingPairs": [
+    { "open": "{", "close": "}" },
+    { "open": "[", "close": "]" },
+    { "open": "(", "close": ")" },
+    { "open": "⟨", "close": "⟩" },
+    { "open": "⦃", "close": "⦄" },
+    { "open": "\"", "close": "\"", "notIn": ["string"] },
+    { "open": "'", "close": "'", "notIn": ["string", "comment"] },
+    { "open": "/-", "close": "-/", "notIn": ["string", "comment"] }
+  ],
+  "surroundingPairs": [
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"],
+    ["⟨", "⟩"],
+    ["⦃", "⦄"],
+    ["\"", "\""],
+    ["'", "'"],
+    ["/-", "-/"]
+  ],
+  "wordPattern": "(-?\\d*\\.\\d\\w*)|([^\\`\\~\\!\\@\\#\\%\\^\\&\\*\\(\\)\\-\\=\\+\\[\\{\\]\\}\\\\\\|\\;\\:\\'\\\"\\,\\.\\<\\>\\/\\?\\s]+)",
+  "folding": {
+    "markers": {
+      "start": "^\\s*--\\s*\\{-#",
+      "end": "^\\s*--\\s*#-\\}"
+    },
+    "offSide": true,
+    "indentation": {
+      "increase": [
+        "^\\s*(where\\s*$|let\\s+.*=.*$|do\\s*$|match\\s+.*with\\s*$|if\\s+.*then\\s*$|else\\s*$|theorem\\s+.*:=\\s*$|lemma\\s+.*:=\\s*$|def\\s+.*:=\\s*$|inductive\\s+.*where\\s*$|structure\\s+.*where\\s*$|class\\s+.*where\\s*$|instance\\s+.*where\\s*$|namespace\\s+.*$|section\\s+.*$)"
+      ],
+      "decrease": [
+        "^\\s*$",
+        "^\\s*\\}"
+      ]
+    }
+  },
+  "indentationRules": {
+    "decreaseIndentPattern": {
+      "pattern": "^\\s*[\\}\\]\\)⟩⦄]|^\\s*$|^\\s*(end|else)\\b"
+    },
+    "increaseIndentPattern": {
+      "pattern": "^\\s*(where\\s*$|let\\s+.*=.*$|do\\s*$|match\\s+.*with\\s*$|if\\s+.*then\\s*$|else\\s*$|theorem\\s+.*:=\\s*$|lemma\\s+.*:=\\s*$|def\\s+.*:=\\s*$|inductive\\s+.*where\\s*$|structure\\s+.*where\\s*$|class\\s+.*where\\s*$|instance\\s+.*where\\s*$|namespace\\s+.*$|section\\s+.*$)"
+    }
+  },
+  "onEnterRules": [
+    {
+      "beforeText": "^\\s*--",
+      "action": {
+        "indent": "none",
+        "appendText": "-- "
+      }
+    },
+    {
+      "beforeText": "^\\s*/-",
+      "afterText": "^(?!\\s*$)",
+      "action": {
+        "indent": "none",
+        "appendText": "  "
+      }
+    },
+    {
+      "beforeText": "^\\s*$",
+      "action": {
+        "indent": "increase"
+      }
+    }
+  ]
+}

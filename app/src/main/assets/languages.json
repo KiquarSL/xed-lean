@@ -1,0 +1,10 @@
+{
+  "languages": [
+    {
+      "grammar": "lang/lean.tmLanguage.json",
+      "name": "Lean",
+      "scopeName": "source.lean",
+      "languageConfiguration": "lang/lean-config.json"
+    }
+  ]
+}

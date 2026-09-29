@@ -1,0 +1,16 @@
+{
+  "$schema": "schema\/schema.json",
+  "id": "io.kiquar.plugin.lean",
+  "name": "Lean Support",
+  "mainClass": "io.kiquar.plugin.lean.Main",
+  "version": "0.1.0",
+  "type": "extension",
+  "description": "Add support for Lean language",
+  "author": {
+    "displayName": "KiquarSL",
+    "github": "KiquarSL"
+  },
+  "tags": ["lean", "functional", "highlighting"],
+  "minAppVersion": 95,
+  "repository": "https://github.com/KiquarSL/xed-lean"
+}
