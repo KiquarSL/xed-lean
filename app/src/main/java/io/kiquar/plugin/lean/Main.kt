@@ -1,60 +1,75 @@
 package io.kiquar.plugin.lean
 
-import android.app.Activity
-import android.content.Context
-import com.rk.exec.isTerminalInstalled
+import androidx.annotation.Keep
+import com.rk.extension.ExtensionAPI
+import com.rk.extension.ExtensionContext
+import com.rk.file.FileTypeManager
+import com.rk.lsp.LspRegistry
+import com.rk.utils.getTempDir
 import com.rk.file.child
-import com.rk.file.sandboxHomeDir
-import com.rk.icons.Icon
-import com.rk.lsp.LspConnectionConfig
-import com.rk.lsp.ScriptedLspServer
+import io.github.rosemoe.sora.langs.textmate.registry.FileProviderRegistry
+import io.github.rosemoe.sora.langs.textmate.registry.GrammarRegistry
+import io.github.rosemoe.sora.langs.textmate.registry.provider.AssetsFileResolver
 import java.io.File
 
-class LeanServer(
-    override val icon: Icon,
-    override val supportedExtensions: List<String> = listOf("lean"),
-    override val installScript: File
-) : ScriptedLspServer() {
+@Keep
+@Suppress("unused")
+class Main(context: ExtensionContext) : ExtensionAPI(context) {
 
-    override val id = "lean"
-    override val languageName = "Lean"
-    override val serverName = "lean-lsp"
-    override val installId = "Lean LSP"
+    private var fileResolver: AssetsFileResolver? = null
+    private var leanLanguage: LeanLanguage? = null
+    private var leanServer: LeanServer? = null
 
-    private val latestVersion = "4.34.1"
-
-    override suspend fun isInstalled(context: Context): Boolean {
-        if (!isTerminalInstalled()) return false
-        return sandboxHomeDir().child(".elan/bin/lean").exists()
+    override fun onLoad() {
+        loadLanguages()
+        loadLsp()
     }
 
-    override suspend fun hasUpdate(context: Context): Boolean {
-        return isUpdatable(context)
+    override fun onDispose() {
+        dispose()
     }
 
-    override fun install(activity: Activity) {
-        launchInstaller(activity, latestVersion)
+    private fun loadLanguages() {
+        val fileProviderRegistry = FileProviderRegistry.getInstance()
+        fileResolver = AssetsFileResolver(context.assets)
+        fileProviderRegistry.addFileProvider(fileResolver)
+
+        val grammarRegistry = GrammarRegistry.getInstance()
+        grammarRegistry.loadGrammars("languages.json")
+
+        leanLanguage = LeanLanguage(context.resources).also {
+            FileTypeManager.register(it)
+        }
     }
 
-    override fun uninstall(activity: Activity) {
-        launchInstaller(activity, "--uninstall", latestVersion)
+    private fun loadLsp() {
+        leanServer = LeanServer(
+            icon = leanLanguage?.icon,
+            installScript = acquireLspInstallScript()
+        ).also {
+            LspRegistry.registerServer(it)
+        }
     }
 
-    override fun update(activity: Activity) {
-        launchInstaller(activity, "--update", latestVersion)
+    private fun acquireLspInstallScript(): File {
+        val stream = context.assets.open("lean-lsp-install.sh")
+        val content = stream.bufferedReader().use { it.readText() }
+        return getTempDir().child("lean-lsp-install.sh").also {
+            it.writeText(content)
+        }
     }
 
-    override suspend fun isUpdatable(context: Context): Boolean {
-        val versionFile = sandboxHomeDir().child(".elan/lean_version.txt")
-        val currentVersion = runCatching { versionFile.readText().trim() }.getOrNull()
-            ?: return false
-        return currentVersion != latestVersion
-    }
+    private fun dispose() {
+        fileResolver?.let {
+            FileProviderRegistry.getInstance().removeFileProvider(it)
+        }
 
-    override fun getConnectionConfig(): LspConnectionConfig {
-        return LspConnectionConfig.Process(arrayOf(
-            sandboxHomeDir().child(".elan/bin/lean").absolutePath,
-            "--server"
-        ))
+        leanLanguage?.let {
+            FileTypeManager.unregister(it)
+        }
+
+        leanServer?.let {
+            LspRegistry.unregisterServer(it)
+        }
     }
 }
