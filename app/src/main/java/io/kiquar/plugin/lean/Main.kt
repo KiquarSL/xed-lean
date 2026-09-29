@@ -4,9 +4,9 @@ import androidx.annotation.Keep
 import com.rk.extension.ExtensionAPI
 import com.rk.extension.ExtensionContext
 import com.rk.file.FileTypeManager
+import com.rk.file.child
 import com.rk.lsp.LspRegistry
 import com.rk.utils.getTempDir
-import com.rk.file.child
 import io.github.rosemoe.sora.langs.textmate.registry.FileProviderRegistry
 import io.github.rosemoe.sora.langs.textmate.registry.GrammarRegistry
 import io.github.rosemoe.sora.langs.textmate.registry.provider.AssetsFileResolver
@@ -37,37 +37,45 @@ class Main(context: ExtensionContext) : ExtensionAPI(context) {
         val grammarRegistry = GrammarRegistry.getInstance()
         grammarRegistry.loadGrammars("languages.json")
 
-        leanLanguage = LeanLanguage(context.resources)
-        FileTypeManager.register(leanLanguage)
+        val lang = LeanLanguage(context.resources)
+        leanLanguage = lang
+        FileTypeManager.register(lang)
     }
 
     private fun loadLsp() {
-        leanServer = LeanServer(
-            icon = leanLanguage?.icon,
+        val lang = leanLanguage
+        if (lang == null) return
+
+        val server = LeanServer(
+            icon = lang.icon,
             installScript = acquireLspInstallScript()
         )
-        LspRegistry.registerServer(leanServer)
+        leanServer = server
+        LspRegistry.registerServer(server)
     }
 
     private fun acquireLspInstallScript(): File {
         val stream = context.assets.open("lean-lsp-install.sh")
         val content = stream.bufferedReader().use { it.readText() }
-        return getTempDir().child("lean-lsp-install.sh").also {
-            it.writeText(content)
-        }
+        val script = getTempDir().child("lean-lsp-install.sh")
+        script.writeText(content)
+        return script
     }
 
     private fun dispose() {
-        fileResolver?.let {
-            FileProviderRegistry.getInstance().removeFileProvider(it)
+        val resolver = fileResolver
+        if (resolver != null) {
+            FileProviderRegistry.getInstance().removeFileProvider(resolver)
         }
 
-        leanLanguage?.let {
-            FileTypeManager.unregister(it)
+        val lang = leanLanguage
+        if (lang != null) {
+            FileTypeManager.unregister(lang)
         }
 
-        leanServer?.let {
-            LspRegistry.unregisterServer(it)
+        val server = leanServer
+        if (server != null) {
+            LspRegistry.unregisterServer(server)
         }
     }
 }
