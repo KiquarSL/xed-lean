@@ -37,18 +37,16 @@ class Main(context: ExtensionContext) : ExtensionAPI(context) {
         val grammarRegistry = GrammarRegistry.getInstance()
         grammarRegistry.loadGrammars("languages.json")
 
-        leanLanguage = LeanLanguage(context.resources).also {
-            FileTypeManager.register(it)
-        }
+        leanLanguage = LeanLanguage(context.resources)
+        FileTypeManager.register(leanLanguage)
     }
 
     private fun loadLsp() {
         leanServer = LeanServer(
             icon = leanLanguage?.icon,
             installScript = acquireLspInstallScript()
-        ).also {
-            LspRegistry.registerServer(it)
-        }
+        )
+        LspRegistry.registerServer(leanServer)
     }
 
     private fun acquireLspInstallScript(): File {
